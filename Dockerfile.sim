@@ -1,0 +1,50 @@
+#Base image
+FROM nvidiaros:latest
+SHELL ["/bin/bash", "-c"]
+
+# Install basic apt packages
+RUN apt-get update -qq && apt-get install -y \
+    build-essential \
+    cmake \
+    catkin \
+    git \
+    pip \
+    python3-catkin-tools \
+    python3-pip \
+
+#Install ROS dependencies
+RUN apt-get install -y \
+    ros-noetic-hector-sensors-description \
+    ros-noetic-hector-xacro-tools \
+    ros-noetic-lms1xx \
+    ros-noetic-ros-numpy \
+    ros-noetic-urg-node \
+    ros-noetic-sick-scan \
+    ros-noetic-joy \
+    ros-noetic-roboticsgroup-upatras-gazebo-plugins\
+    ros-noetic-dynamixel-sdk \
+    ros-noetic-vision-msgs \
+    ros-noetic-moveit-commander \
+    ros-noetic-moveit-simple-controller-manager \
+    ros-noetic-moveit-fake-controller-manager \
+    ros-noetic-ompl \
+    ros-noetic-ddynamic-reconfigure \
+    ros-noetic-librealsense2 \
+    libqt5x11extras5-dev \
+    ros-noetic-graph-msgs \
+    ros-noetic-rviz-visual-tools \
+    ros-noetic-joint-trajectory-controller \
+    ros-noetic-apriltag \
+    ros-noetic-apriltag-ros \
+    ros-noetic-effort-controllers \
+
+#Others
+RUN apt-get install -y \
+    beignet-dev \
+    redis \
+    redis-server \
+    libusb-1.0-0-dev \
+    libcusparse-11-0 \
+    libturbojpeg0-dev \
+    libglfw3-dev \
+
