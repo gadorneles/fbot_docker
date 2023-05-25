@@ -1,16 +1,13 @@
 #Base image
-FROM nvidiaros:latest
+FROM nvidia_ros:latest
 SHELL ["/bin/bash", "-c"]
 
 # Install basic apt packages
-RUN apt-get update -qq && apt-get install -y \
+RUN apt-get update -qq \ 
+    && apt-get install -y \
     build-essential \
-    cmake \
-    catkin \
     git \
-    pip \
-    python3-catkin-tools \
-    python3-pip \
+    python3-pip 
 
 #Install ROS dependencies
 RUN apt-get install -y \
@@ -36,7 +33,7 @@ RUN apt-get install -y \
     ros-noetic-joint-trajectory-controller \
     ros-noetic-apriltag \
     ros-noetic-apriltag-ros \
-    ros-noetic-effort-controllers \
+    ros-noetic-effort-controllers 
 
 #Others
 RUN apt-get install -y \
@@ -46,5 +43,28 @@ RUN apt-get install -y \
     libusb-1.0-0-dev \
     libcusparse-11-0 \
     libturbojpeg0-dev \
-    libglfw3-dev \
+    libglfw3-dev 
+
+# Create Catkin workspace and clone the fbot repositories
+RUN mkdir -p home/butia_ws/src \
+    && cd home/butia_ws/src \
+    && source /opt/ros/noetic/setup.bash \
+    && git clone https://github.com/butia-bots/butia_speech.git \
+    https://github.com/butia-bots/butia_speech.git \
+    https://github.com/butia-bots/butia_launchfiles.git \
+    https://github.com/butia-bots/butia_world.git \
+    https://github.com/butia-bots/butia_world_msgs.git \
+    https://github.com/butia-bots/butia_navigation_system.git \
+    https://github.com/butia-bots/butia_quiz.git \
+    --recursive https://github.com/butia-bots/butia_vision.git \
+    https://github.com/butia-bots/interbotix_ros_core.git \
+    https://github.com/butia-bots/interbotix_ros_manipulators.git \
+    https://github.com/butia-bots/interbotix_ros_toolboxes.git \
+    https://github.com/butia-bots/butia_face.git \
+    https://github.com/butia-bots/butia_description.git \
+    https://github.com/butia-bots/iai_kinect2.git \
+    https://github.com/butia-bots/rosaria.git \
+    https://github.com/butia-bots/libfreenect2.git
+
+#Install the rest of the dependencies 
 
