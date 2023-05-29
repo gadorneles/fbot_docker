@@ -11,14 +11,19 @@ RUN mkdir -p ~/butia_ws/src \
     && git clone https://github.com/butia-bots/butia_navigation_system.git \
     && git clone https://github.com/butia-bots/butia_quiz.git \
     && git clone --recursive https://github.com/butia-bots/butia_vision.git \
-    && git clone https://github.com/butia-bots/interbotix_ros_core.git \
-    && git clone https://github.com/butia-bots/interbotix_ros_manipulators.git \
-    && git clone https://github.com/butia-bots/interbotix_ros_toolboxes.git \
     && git clone https://github.com/butia-bots/butia_face.git \
     && git clone https://github.com/butia-bots/butia_description.git \
     && git clone https://github.com/butia-bots/iai_kinect2.git \
     && git clone https://github.com/butia-bots/rosaria.git \
-    && git clone https://github.com/butia-bots/libfreenect2.git
+    && git clone https://github.com/butia-bots/libfreenect2.git \
+    && git clone https://github.com/ros-perception/openslam_gmapping \
+    && git clone https://github.com/ros-perception/slam_gmapping
+    
+RUN mkdir -p ~/interbotix_ws/src \
+    && cd ~/interbotix_ws/src \
+    && git clone https://github.com/butia-bots/interbotix_ros_core.git \
+    && git clone https://github.com/butia-bots/interbotix_ros_manipulators.git \
+    && git clone https://github.com/butia-bots/interbotix_ros_toolboxes.git 
 
 #Install the rest of the dependencies 
 #Tensorboard might not be needed
@@ -51,4 +56,9 @@ RUN pip3 install\
     playsound==1.3.0 \
     termcolor==1.1.0 \
     audioplayer \
-    ffmpeg \
+    ffmpeg 
+
+RUN cd ~/butia_ws/src/libfreenect2 \
+    && chmod +x install.sh \
+    && sudo ./install.sh
+

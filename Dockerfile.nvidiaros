@@ -23,7 +23,8 @@ RUN apt-get update -qq \
     && apt-get install -y \
     build-essential \
     git \
-    python3-pip 
+    python3-pip \
+    python3-rosdep 
 
 #Install ROS dependencies
 RUN apt-get install -y \
@@ -49,7 +50,11 @@ RUN apt-get install -y \
     ros-noetic-joint-trajectory-controller \
     ros-noetic-apriltag \
     ros-noetic-apriltag-ros \
-    ros-noetic-effort-controllers 
+    ros-noetic-effort-controllers \
+    ros-noetic-navigation \
+    ros-noetic-map-server \
+    ros-noetic-move-base \
+    ros-noetic-amcl \
 
 #Others
 RUN apt-get install -y \
@@ -59,4 +64,5 @@ RUN apt-get install -y \
     libusb-1.0-0-dev \
     libcusparse-11-0 \
     libturbojpeg0-dev \
-    libglfw3-dev 
+    libglfw3-dev \
+    python3-pyaudio
