@@ -1,11 +1,14 @@
 #Use the existing NVIDIA container
-FROM nvidia/cuda:12.1.1-base-ubuntu20.04
+FROM nvidia/cuda:11.2.0-cudnn8-devel-ubuntu20.04
 SHELL ["/bin/bash", "-c"]
 
 # Install basic apt packages
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y locales lsb-release
 RUN dpkg-reconfigure locales
+
+#Install CUDA samples
+RUN apt-get install -y --no-install-recommends cuda-samples-11.2 
 
 #Install ROS Noetic
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -27,15 +30,9 @@ RUN apt-get update -qq \
     python3-rosdep 
 
 #Install ROS dependencies
-RUN apt-get install -y \
-    ros-noetic-hector-sensors-description \
+RUN apt install -y \
+    ros-noetic-hector-sensors-description \ 
     ros-noetic-hector-xacro-tools \
-    ros-noetic-lms1xx \
-    ros-noetic-ros-numpy \
-    ros-noetic-urg-node \
-    ros-noetic-sick-scan \
-    ros-noetic-joy \
-    ros-noetic-roboticsgroup-upatras-gazebo-plugins\
     ros-noetic-dynamixel-sdk \
     ros-noetic-vision-msgs \
     ros-noetic-moveit-commander \
@@ -51,15 +48,22 @@ RUN apt-get install -y \
     ros-noetic-apriltag \
     ros-noetic-apriltag-ros \
     ros-noetic-effort-controllers \
-    ros-noetic-navigation \
+    ros-noetic-navigation 
+
+RUN apt-get install -y \
+    ros-noetic-lms1xx \
+    ros-noetic-ros-numpy \
+    ros-noetic-urg-node \
+    ros-noetic-sick-scan \
+    ros-noetic-joy \
+    ros-noetic-roboticsgroup-upatras-gazebo-plugins\
     ros-noetic-map-server \
     ros-noetic-move-base \
-    ros-noetic-amcl \
+    ros-noetic-amcl 
 
 #Others
 RUN apt-get install -y \
     beignet-dev \
-    redis \
     redis-server \
     libusb-1.0-0-dev \
     libcusparse-11-0 \
