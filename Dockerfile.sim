@@ -1,5 +1,20 @@
 #Base image
 FROM nvidiaros:latest
+LABEL Gabriel Dorneles <dorneles1215@gmail.com>
+
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install --yes pulseaudio-utils
+
+# Set up the user
+RUN useradd -u 1000 -ms /bin/bash fbot \
+    && echo 'fbot ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+    && gpasswd -a fbot audio
+
+COPY pulse-client.conf /etc/pulse/client.conf
+
+USER fbot
+ENV HOME /home/fbot
+WORKDIR /home/fbot
 
 # Create Catkin workspace and clone the fbot repositories
 RUN mkdir -p ~/butia_ws/src \
@@ -68,10 +83,10 @@ RUN pip3 install\
 RUN cd ~/butia_ws/src/butia_vision/ \
     && git checkout feat/vision_reqs \
     && chmod +x install.sh \
-    && sudo ./install.sh \
+    && ./install.sh \
     && cd ~/butia_ws/src/libfreenect2 \
     && chmod +x install.sh \
-    && sudo ./install.sh \
+    && ./install.sh \
     && cd ~/butia_ws/src/butia_navigation_system \
     && git checkout feature/simulation \
     && cd ~/butia_ws/src/butia_launchfiles \
