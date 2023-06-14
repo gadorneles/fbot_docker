@@ -22,11 +22,12 @@ xhost + local:docker
 ```
 6. Initialize the container:
 ```bash
-docker run -it --net=host --gpus all \
+docker run -t -i --net=host --gpus all \
 --env="NVIDIA\_DRIVER\_CAPABILITIES=all" \
 --env="DISPLAY" \
 --env="QT\_X11\_NO_MITSHM=1" \
 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+--volume=/run/user/1000/pulse:/run/user/1000/pulse \
 --privileged \
 doris_sim \
 bash
