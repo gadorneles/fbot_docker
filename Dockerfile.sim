@@ -2,16 +2,20 @@
 FROM nvidiaros:latest
 LABEL Gabriel Dorneles <dorneles1215@gmail.com>
 
+#Install pulseaudio
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --yes pulseaudio-utils
 
-# Set up the user
+# Create the user
 RUN useradd -u 1000 -ms /bin/bash fbot \
     && echo 'fbot ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+    && echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc \
     && gpasswd -a fbot audio
 
+#Copy the pulseaudio file required to run audio
 COPY pulse-client.conf /etc/pulse/client.conf
 
+#Set the user
 USER fbot
 ENV HOME /home/fbot
 WORKDIR /home/fbot
@@ -87,6 +91,8 @@ RUN cd ~/butia_ws/src/butia_vision/ \
     && cd ~/butia_ws/src/libfreenect2 \
     && chmod +x install.sh \
     && ./install.sh \
+    && cd ~/butia_ws/src/butia_speech \
+    && git checkout feat/speech_reqs \
     && cd ~/butia_ws/src/butia_navigation_system \
     && git checkout feature/simulation \
     && cd ~/butia_ws/src/butia_launchfiles \
