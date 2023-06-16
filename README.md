@@ -21,17 +21,22 @@ docker build -f Dockerfile.sim -t doris_sim .
 xhost + local:docker
 ```
 6. Initialize the container:
+
 ```bash
 docker run -t -i --net=host --gpus all \
 --env="NVIDIA\_DRIVER\_CAPABILITIES=all" \
 --env="DISPLAY" \
 --env="QT\_X11\_NO_MITSHM=1" \
+--env="PULSE_SERVER=unix:/tmp/pulseaudio.socket" \
+--env="PULSE_COOKIE=/tmp/pulseaudio.cookie" \
 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
---volume=/run/user/1000/pulse:/run/user/1000/pulse \
+--volume="/tmp/pulseaudio.socket:/tmp/pulseaudio.socket" \
 --privileged \
 doris_sim \
 bash
+
 ```
+
 7. Clone the butia_behavior repository:  
 ```bash
 cd ~/butia_ws/src

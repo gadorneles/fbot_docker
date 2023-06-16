@@ -2,14 +2,9 @@
 FROM nvidiaros:latest
 LABEL Gabriel Dorneles <dorneles1215@gmail.com>
 
-#Install pulseaudio
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --yes pulseaudio-utils
-
 # Create the user
 RUN useradd -u 1000 -ms /bin/bash fbot \
     && echo 'fbot ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
-    && echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc \
     && gpasswd -a fbot audio
 
 #Copy the pulseaudio file required to run audio
