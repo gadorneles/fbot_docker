@@ -2,21 +2,22 @@
 FROM nvidiaros:latest
 LABEL Gabriel Dorneles <dorneles1215@gmail.com>
 
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --yes pulseaudio-utils
+    && apt-get install -y \
+    pulseaudio-utils \
+    alsa-base \
+    alsa-utils
 
 # Set up the user
 RUN useradd -u 1000 -ms /bin/bash fbot \
     && echo 'fbot ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
-    && gpasswd -a fbot audio
+    && gpasswd -a fbot audio \
+    && export PATH=$PATH:/place/with/the/file
 
 COPY pulse-client.conf /etc/pulse/client.conf
 
 USER fbot
 ENV HOME /home/fbot
+RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc 
 WORKDIR /home/fbot
-
-RUN mkdir -p ~/butia_ws/src \
-    && cd ~/butia_ws/src \
-    && git clone https://github.com/butia-bots/butia_speech.git \
-    && git clone https://github.com/butia-bots/libfreenect2.git
