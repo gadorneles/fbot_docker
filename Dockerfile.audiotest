@@ -19,5 +19,4 @@ COPY pulse-client.conf /etc/pulse/client.conf
 
 USER fbot
 ENV HOME /home/fbot
-RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc 
 WORKDIR /home/fbot
