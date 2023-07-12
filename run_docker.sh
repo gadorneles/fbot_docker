@@ -2,7 +2,7 @@
 DOCKER_VOLUMES="
 --volume="/tmp/.X11-unix:/tmp/.X11-unix" \
 --volume="/tmp/pulseaudio.socket:/tmp/pulseaudio.socket" \
---volume="$(eval echo ~$USER)/butia_ws:/home/fbot/butia_ws:rw" \
+--volume="$(eval echo ~$USER)/butia_ws/:/home/fbot/butia_ws/:rw" \
 "
 DOCKER_ENV_VARS="
 --env="NVIDIA_DRIVER_CAPABILITIES=all" \

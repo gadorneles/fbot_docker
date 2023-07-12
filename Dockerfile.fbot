@@ -1,0 +1,133 @@
+#Use the existing NVIDIA container
+FROM nvidia/cuda:11.2.2-cudnn8-devel-ubuntu20.04
+SHELL ["/bin/bash", "-c"]
+
+# Install basic apt packages
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y locales lsb-release
+RUN dpkg-reconfigure locales
+
+#Install CUDA samples
+RUN apt-get install -y --no-install-recommends cuda-samples-11.2 
+
+#Install ROS Noetic
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ros-noetic-desktop-full
+RUN apt-get install -y --no-install-recommends python3-rosdep
+RUN rosdep init \
+ && rosdep fix-permissions \
+ && rosdep update
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+
+#Basic Packages
+RUN apt-get update -qq \ 
+    && apt-get install -y \
+    build-essential \
+    git \
+    python3-pip \
+    python3-rosdep 
+
+#Install ROS dependencies
+RUN apt install -y \
+    ros-noetic-hector-sensors-description \ 
+    ros-noetic-hector-xacro-tools \
+    ros-noetic-dynamixel-sdk \
+    ros-noetic-vision-msgs \
+    ros-noetic-moveit-commander \
+    ros-noetic-moveit-simple-controller-manager \
+    ros-noetic-moveit-fake-controller-manager \
+    ros-noetic-ompl \
+    ros-noetic-ddynamic-reconfigure \
+    ros-noetic-librealsense2 \
+    libqt5x11extras5-dev \
+    ros-noetic-graph-msgs \
+    ros-noetic-rviz-visual-tools \
+    ros-noetic-joint-trajectory-controller \
+    ros-noetic-apriltag \
+    ros-noetic-apriltag-ros \
+    ros-noetic-effort-controllers \
+    ros-noetic-navigation 
+
+RUN apt-get install -y \
+    ros-noetic-lms1xx \
+    ros-noetic-ros-numpy \
+    ros-noetic-urg-node \
+    ros-noetic-sick-scan \
+    ros-noetic-joy \
+    ros-noetic-roboticsgroup-upatras-gazebo-plugins\
+    ros-noetic-map-server \
+    ros-noetic-move-base \
+    ros-noetic-amcl 
+
+#Others
+RUN apt-get install -y \
+    beignet-dev \
+    redis-server \
+    libusb-1.0-0-dev \
+    libcusparse-11-0 \
+    libturbojpeg0-dev \
+    libglfw3-dev \
+    python3-pyaudio \
+    pulseaudio \
+    pulseaudio-utils \
+    alsa-base \
+    alsa-utils
+
+# Create the user
+RUN useradd -u 1000 -ms /bin/bash fbot \
+    && echo 'fbot ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+    && gpasswd -a fbot audio
+
+#Copy the pulseaudio file required to run audio
+COPY pulse-client.conf /etc/pulse/client.conf
+
+#Set the user
+USER fbot
+ENV HOME /home/fbot
+WORKDIR /home/fbot
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+
+RUN pip3 install\
+    numpy==1.22.0 \
+    tensorflow==2.8.0 \
+    protobuf==3.19.4 \
+    tensorboard==2.8 \ 
+    espnet==202207 \
+    pandas==1.3.5 \
+    matplotlib==3.5.3 \
+    certifi==2022.6.15.1 \
+    jinja2==3.1.2 \
+    urllib3==1.26.12 \
+    idna==3.3 \
+    pyparsing==3.0.9 \
+    props \
+    librosa==0.9.2 \
+    multipledispatch==0.6.0 \
+    yolov5==7.0.9 \
+    python-dateutil==2.8.2 \ 
+    setuptools==67.3.1 \ 
+    open3d==0.13.0 \
+    espnet-model-zoo==0.1.7 \
+    pygame==2.1.0 \
+    pvporcupine==2.1.3 \
+    pvrecorder \
+    transformers==4.28.0 \
+    SpeechRecognition \
+    playsound==1.3.0 \
+    termcolor==1.1.0 \
+    spacy==3.5.1 \
+    pyworld==0.3.0 \
+    redis==3.4.1 \
+    typeguard==2.13.3 \
+    pyyaml==5.4.1 \
+    wheel==0.40.0 \
+    audioplayer \
+    ffmpeg 
+
+
+
+
+
+    
